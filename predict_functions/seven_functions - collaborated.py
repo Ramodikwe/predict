@@ -104,74 +104,189 @@ stop_words_dict = {
 
 
 ### START FUNCTION
-def dictionary_of_metrics(items):
-    """ Calculates mean, median, variance, standard deviation, min and max
-    from a given list
+def dictionary_of_metrics(arr):
 
-        Parameters
-        ----------
-        items: list
-                The values on which to perfom calculations.
+    #defination of variables
+    a = 0
+    b = 0
+    c = 0
+    d = 0
+    e = 0
+    n = len(arr)
+    arr=sorted(arr)
+    maximum=0
+    avg=0
+    std=0
+    var=0
+    #calculation of the mean
 
-        Returns
-        -------
-        metrics: dictionary
-                    Dictionary of metrics calculated
-    """
+    while a < n:
+        avg += arr[a]
+        a += 1
+    avg = avg / n
+    avg = round(avg,2)
 
-    # Initializing dictionary
-    metrics = {'mean':0,
-               'median':0,
-               'var':0,
-               'std':0,
-               'min':0,
-               'max':0}
+    #calculation of standard deviation
 
-    #Calculating metrics and assigning values
-    metrics['mean'] = round(sum(items)/len(items),2)
-    metrics['median'] = round(np.median(items),2)
-    metrics['var'] = round(np.var(items, ddof=1),2)
-    metrics['std'] = round(np.std(items, ddof=1),2)
-    metrics['min'] = round(min(items),2)
-    metrics['max'] = round(max(items),2)
-    return metrics
+    while b < n:
+        std += (arr[b] - avg )** 2
+        b += 1
+    std = (std / (n-1)) ** 0.5
+    std=round(std,2)
+
+    #calculation of varience
+
+    while e < n:
+        var += (arr[e] - avg )** 2
+        e += 1
+    var = (var / (n-1))
+    var=round(var,2)
+
+
+    #calculation of median
+
+    if ((n/2)-0.5)== (n//2):
+        med=arr[int((n/2)+0.5)]
+    else:
+        med=arr[int((n/2)-0.5)] + arr[int((n/2)+0.5)]
+        med=med/2
+
+
+    #calculation of  max
+
+    while c<n:
+        if maximum<=arr[c]:
+            maximum=arr[d]
+        c+=1
+
+    #calculation of minimum
+
+    minimum =maximum
+    while d < n:
+        if minimum >= arr[d]:
+            minimum = arr[d]
+            minimum=round(minimum)
+        d += 1
+
+    met_dict={'mean':avg,'median':med,'varience':var,'standard deviation':std,'min':minimum,'max':maximum}
+    return met_dict
+
+
 
 ### END FUNCTION
+
+
+# In[6]:
+
+
+dictionary_of_metrics(gauteng)
+
+
+# _**Expected Output**_:
+#
+# ```python
+# dictionary_of_metrics(gauteng) == {'mean': 26244.42,
+#                                    'median': 24403.5,
+#                                    'var': 108160153.17,
+#                                    'std': 10400.01,
+#                                    'min': 8842.0,
+#                                    'max': 39660.0}
+#  ```
+
+# ## Function 2: Five Number Summary
+#
+# **Function Specifications:**
+# - The function takes a list as input.
+# - The function  returns a `dict` with keys `'max'`, `'median'`, `'min'`, `'q1'`, and `'q3'` corresponding to the maximum, median, minimum, first quartile and third quartile, respectively. You may use numpy functions to aid in your calculations.
+# - All numerical values are rounded to two decimal places.
+
+# In[64]:
 
 
 ### START FUNCTION
-def five_num_summary(items):
-    """Calculates max, median, min, quartile 1 and quartile 3
-    from a list of numbers
+def five_num_summary(arr):
+    #defination of variables
+    c=0
+    d=0
+    maximum=0
+    n=len(arr)
+    #first quartile
+    arr=sorted(arr)
+    quartile_1=np.quantile(arr,0.25)
+    quartile_1=round(quartile_1,2)
 
-    Parameters
-    ----------
-    items: list
-            List of numbers o which to perform operations
+    #third quartile
+    quartile_3=np.quantile(arr,0.75)
+    quartile_3=round(quartile_3,2)
 
-    Returns
-    -------
-    fives: dictionary
-            The resulting summary after operations have been performed
-    """
+    #calculation of  max
 
-    # Initializing dictionary
-    fives = {'max':0,
-             'median':0,
-             'min':0,
-             'q1':0,
-             'q3':0}
+    while c<n:
+        if maximum<=arr[c]:
+            maximum=arr[c]
+        c+=1
 
-    # Performing operations and assigning to dictionary
-    fives['max'] = round(max(items),2)
-    fives['median'] = round(np.median(items),2)
-    fives['min'] = round(min(items),2)
-    fives['q1'] = np.quantile(items, 0.25)
-    fives['q3'] = np.quantile(items, 0.75)
+    #calculation of minimum
 
-    return fives
+    minimum =maximum
+    while d < n:
+        if minimum >= arr[d]:
+            minimum = arr[d]
+            minimum=round(minimum,2)
+        d += 1
+
+    #calculation of median
+
+    if ((n/2)-0.5)== (n//2):
+        med=arr[int((n/2)+0.5)]
+    else:
+        med=arr[int((n/2)-0.5)] + arr[int((n/2)+0.5)]
+        med=med/2
+
+    dict_five_num={'max':maximum,'median':med,'min':minimum,'q1':quartile_1,'q3':quartile_3}
+    return dict_five_num
+
+
 
 ### END FUNCTION
+
+
+# In[65]:
+
+
+five_num_summary(gauteng)
+
+
+# _**Expected Output:**_
+#
+# ```python
+# five_num_summary(gauteng) == {
+#     'max': 39660.0,
+#     'median': 24403.5,
+#     'min': 8842.0,
+#     'q1': 18653.0,
+#     'q3': 36372.0
+# }
+#
+# ```
+
+# ## Function 3: Date Parser
+#
+# The `dates` variable (created at the top of this notebook) is a list of dates represented as strings. The string contains the date in `'yyyy-mm-dd'` format, as well as the time in `hh:mm:ss` formamt. The first three entries in this variable are:
+# ```python
+# dates[:3] == [
+#     '2019-11-29 12:50:54',
+#     '2019-11-29 12:46:53',
+#     '2019-11-29 12:46:10'
+# ]
+# ```
+#
+# **Function Specifications:**
+# - The function takes a list of strings as input.
+# - Each string in the input list is formatted as `'yyyy-mm-dd hh:mm:ss'`.
+# - The function returns a list of strings where each element in the returned list contains only the date in the `'yyyy-mm-dd'` format.
+
+# In[9]:
 
 
 ### START FUNCTION
@@ -336,47 +451,122 @@ def word_splitter(twitter_df):
 
 ### START FUNCTION
 def stop_words_remover(df):
-    """Removes stop words from tweet and appends new column to DataFrame with operation results.
+    twitter_list=list(twitter_df['Tweets']) #creating a list from the tweets column in the twitter df
+    n=0
+    split_tweets=list(range(len(twitter_df)))
+    while n<len(twitter_df):
+        split_tweets[n]=(twitter_list[n].split())#split every element in the twitter list
+        split_tweets[n]=[x.lower() for x in split_tweets[n]] #convert the tweets to lower case
+        words=split_tweets[n]
+        similar=list(set(stop_words_dict['stopwords']) & set(words)) # create a list from a set of similar words from the twitter split list and the stowpword dictionary
+        m=0
+        while m<len(similar): #loop to remove every word in the similar list from the split tweets list
+            words.remove(similar[m])
+            m+=1
+        n+=1
+    twitter_df['Without Stop Words']=split_tweets #return the twitter list without the stopwords
+    return twitter_df
 
-    Parameters
-    ----------
-    df: DataFrame
-        DataFrame on which to perform operation
-
-    Returns
-    -------
-    df: DataFrame
-        Modified DataFrame with 'Split Tweets' column added
-    """
-
-    # Stop word remover function
-    def remover(tweet):
-        """Removes stop words from a string.
-
-        Parameters
-        ----------
-        tweet: string
-            Tweet on which operaton is performed
-
-        Returns
-        -------
-        without_stops: list
-            List of words not found in stop_words_dict
-        """
-
-        # Lower and split tweet and initialize empty list
-        split_tweet = tweet.lower().split()
-        without_stops = []
-
-        # For each word in the split tweet
-        for word in split_tweet:
-
-            # If the word is not in the dictionary...
-            if word not in stop_words_dict['stopwords']:
-                without_stops.append(word) # append to list
-        return without_stops
-
-    # Add new column to DataFrame
-    df['Without Stop Words'] = df['Tweets'].apply(remover)
-    return df
 ### END FUNCTION
+
+
+# In[62]:
+
+
+stop_words_remover(twitter_df.copy())
+
+
+# _**Expected Output**_:
+#
+# Specific rows:
+#
+# ```python
+# stop_words_remover(twitter_df.copy()).loc[0, "Without Stop Words"] == ['@bongadlulane', 'send', 'email', 'mediadesk@eskom.co.za']
+# stop_words_remover(twitter_df.copy()).loc[100, "Without Stop Words"] == ['#eskomnorthwest', '#mediastatement', ':', 'notice', 'supply', 'interruption', 'lichtenburg', 'area', 'https://t.co/7hfwvxllit']
+# ```
+#
+# Whole table:
+# ```python
+# stop_words_remover(twitter_df.copy())
+# ```
+#
+# > <table class="dataframe" border="1">
+#   <thead>
+#     <tr style="text-align: right;">
+#       <th></th>
+#       <th>Tweets</th>
+#       <th>Date</th>
+#       <th>Without Stop Words</th>
+#     </tr>
+#   </thead>
+#   <tbody>
+#     <tr>
+#       <th>0</th>
+#       <td>@BongaDlulane Please send an email to mediades...</td>
+#       <td>2019-11-29 12:50:54</td>
+#       <td>[@bongadlulane, send, email, mediadesk@eskom.c...</td>
+#     </tr>
+#     <tr>
+#       <th>1</th>
+#       <td>@saucy_mamiie Pls log a call on 0860037566</td>
+#       <td>2019-11-29 12:46:53</td>
+#       <td>[@saucy_mamiie, pls, log, 0860037566]</td>
+#     </tr>
+#     <tr>
+#       <th>2</th>
+#       <td>@BongaDlulane Query escalated to media desk.</td>
+#       <td>2019-11-29 12:46:10</td>
+#       <td>[@bongadlulane, query, escalated, media, desk.]</td>
+#     </tr>
+#     <tr>
+#       <th>3</th>
+#       <td>Before leaving the office this afternoon, head...</td>
+#       <td>2019-11-29 12:33:36</td>
+#       <td>[leaving, office, afternoon,, heading, weekend...</td>
+#     </tr>
+#     <tr>
+#       <th>4</th>
+#       <td>#ESKOMFREESTATE #MEDIASTATEMENT : ESKOM SUSPEN...</td>
+#       <td>2019-11-29 12:17:43</td>
+#       <td>[#eskomfreestate, #mediastatement, :, eskom, s...</td>
+#     </tr>
+#     <tr>
+#       <th>...</th>
+#       <td>...</td>
+#       <td>...</td>
+#       <td>...</td>
+#     </tr>
+#     <tr>
+#       <th>195</th>
+#       <td>Eskom's Visitors Centresâ€™ facilities include i...</td>
+#       <td>2019-11-20 10:29:07</td>
+#       <td>[eskom's, visitors, centresâ€™, facilities, incl...</td>
+#     </tr>
+#     <tr>
+#       <th>196</th>
+#       <td>#Eskom connected 400 houses and in the process...</td>
+#       <td>2019-11-20 10:25:20</td>
+#       <td>[#eskom, connected, 400, houses, process, conn...</td>
+#     </tr>
+#     <tr>
+#       <th>197</th>
+#       <td>@ArthurGodbeer Is the power restored as yet?</td>
+#       <td>2019-11-20 10:07:59</td>
+#       <td>[@arthurgodbeer, power, restored, yet?]</td>
+#     </tr>
+#     <tr>
+#       <th>198</th>
+#       <td>@MuthambiPaulina @SABCNewsOnline @IOL @eNCA @e...</td>
+#       <td>2019-11-20 10:07:41</td>
+#       <td>[@muthambipaulina, @sabcnewsonline, @iol, @enc...</td>
+#     </tr>
+#     <tr>
+#       <th>199</th>
+#       <td>RT @GP_DHS: The @GautengProvince made a commit...</td>
+#       <td>2019-11-20 10:00:09</td>
+#       <td>[rt, @gp_dhs:, @gautengprovince, commitment, e...</td>
+#     </tr>
+#   </tbody>
+# </table>
+
+# In[ ]:
