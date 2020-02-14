@@ -1,0 +1,7 @@
+README.md
+setup.py
+seven_functions.egg-info/PKG-INFO
+seven_functions.egg-info/SOURCES.txt
+seven_functions.egg-info/dependency_links.txt
+seven_functions.egg-info/requires.txt
+seven_functions.egg-info/top_level.txt
